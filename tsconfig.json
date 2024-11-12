@@ -10,7 +10,7 @@
 		"outDir": "dist",
 		"esModuleInterop": true,
 		"experimentalDecorators": true,
-		"useDefineForClassFields": true
+		"useDefineForClassFields": false 
 	},
 	"include": ["src/**/*.ts"]
 }
