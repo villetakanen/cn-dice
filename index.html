@@ -3,17 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./public/tester-styles.css">
   <title>cn-dice Test</title>
 </head>
-<body style="line-height: 32px;">
-  <cn-dice sides="6"></cn-dice>
-  <cn-dice sides="20" value="15"></cn-dice>
-  <cn-dice sides="10" roll></cn-dice>
+<body>
+  <section>
+    <h1>Basic dice styles</h1>
+    <div class="flex-row">
+      <div class="d4 die">
+        <span>4</span>
+      </div>
+    </div>
 
-  <img style="width:200px" src="/assets/d4.svg" alt="d4">
 
 
-  <p>Here is a line of text with a d6: <cn-dice></cn-dice></p>
+  <section>
+    <h1>All basic dice</h1>
+    <div style="display:flex;gap:0.5rem;flex-wrap: nowrap; height: 10rem;">
+      <cn-dice sides="4"></cn-dice>
+      <cn-dice sides="6"></cn-dice>
+      <cn-dice sides="8"></cn-dice>
+      <cn-dice sides="10"></cn-dice>
+      <cn-dice sides="12"></cn-dice>
+      <cn-dice sides="20"></cn-dice>
+    </div>
+  </section>
+
+  <p>Here is a d20 <cn-dice sides="20" value="7"></cn-dice>, within a paragraph. The testing css has <code>--cn-dice-size: 24px;</code> where 24px is the line-height of <code>p</code></p>
 
   <script type="module" src="/src/cn-dice.ts"></script> 
 </body>

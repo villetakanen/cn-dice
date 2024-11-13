@@ -1,70 +1,114 @@
-import { LitElement, html, css } from 'lit';
-import { customElement, property } from 'lit/decorators.js';
+import { LitElement, css, html } from "lit";
+import { customElement, property } from "lit/decorators.js";
+import "./styles.css";
 
-@customElement('cn-dice')
+@customElement("cn-dice")
 export class CnDice extends LitElement {
-  static styles = css`
-    :host {
-      container: cn-dice / inline-size;
-      display: inline-block;
-      height: 36px;
-      aspect-ratio: 1; /* Maintain 1:1 aspect ratio */
-      position: relative;
-      background-color: red;
-      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",   
- sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-      inline-size: 36px;
-      vertical-align: middle;
-    }
-    .dice-container { 
-      height: 100cqi; /* 100% of the container height */
-      aspect-ratio: 1; /* Maintain 1:1 aspect ratio */
-      position: relative; 
-      display: inline-flex; /* Add inline-flex container */
-      align-items: center; /* Vertically center content */
-      justify-content: center; /* Horizontally center content */
-      
-    }
-    img {
-      width: 100%; 
-      height: 100%;
-      object-fit: contain; 
-    }
-    .dice-value {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%); 
-      font-size: 80cqi; /* 80% of the container height */
-      line-height: 1; /* To prevent extra spacing */
-      color: black;
-      -webkit-text-stroke: 1px white; 
-      text-stroke: 1px white; 
-      text-shadow: 0 0 4px black;
-    }
+	static styles = css`
+  :host {
+    display: flex;
+    height: var(--_cn-dice-size);
+    box-sizing: border-box;
+    aspect-ratio: 1;
+    position: relative;
+    container-type: inline-size;
+    container-name: cn-dice;
+    align-items: center;
+    justify-content: center;
+  }
+  /* CSS for the dice container */
+  .dice-container { 
+    height: 100cqi;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--_cn-dice-font-family);
+    font-weight: var(--_cn-dice-font-weight);
+    font-size: var(--_cn-dice-font-size);
+    overflow: visible;
+    position: relative;
+  }
+  .dice-value {
+    text-shadow: var(--_cn-dice-text-shadow);
+    opacity: 1
+  }
+  
+  .dice-container::before {
+    aspect-ratio: 1;
+    content: '';
+    position: absolute;
+    z-index: -1;
+    transform: rotate(2.25deg);
+  }
+
+  /* CSS Shapes and Colors for different dice */
+  .d4::before {
+    height: 90cqi;
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%); 
+    background-color: var(--_cn-dice-color-d4); 
+  }
+  .d6::before {
+    height: 80cqi; 
+    clip-path: none;
+    background-color: var(--_cn-dice-color-d6); 
+  }
+  .d8::before {
+    height: 100cqi; 
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); 
+    background-color: var(--_cn-dice-color-d8);
+  }
+  .d10::before { 
+    height: 95cqi;
+    clip-path: polygon(50% 0%, 95% 40%, 95% 60%, 50% 100%, 5% 60%, 5% 40%);
+    background-color: var(--_cn-dice-color-d10);
+  }
+  .d12::before { 
+    height: 100cqi;
+    clip-path: polygon(
+        34.54915% 2.44717%,
+        65.45085% 2.44717%,
+        90.45085% 20.61074%,
+        100% 50%,
+        90.45085% 79.38926%,
+        65.45085% 97.55283%,
+        34.54915% 97.55283%,
+        9.54915% 79.38926%,
+        0% 50%,
+        9.54915% 20.61074%
+    );
+    background-color: var(--_cn-dice-color-d12);
+  }
+  .d20::before { 
+    height: 90cqi;
+    aspect-ratio: 1/cos(30deg);
+    clip-path: polygon(50% -50%,100% 50%,50% 150%,0 50%);
+    background-color: var(--_cn-dice-color-d20);
+    transform: rotate(35deg);
+  }
   `;
 
-  @property({ type: Number, reflect: true }) 
-  public sides = 6; 
+	@property({ type: Number, reflect: true })
+	public sides = 6;
+	@property({ type: Number, reflect: true })
+	public value = 1;
+	@property({ type: Boolean, reflect: true })
+	public roll = false;
 
-  @property({ type: Number, reflect: true })
-  public value = 6;  
+	sideOptions = [4, 6, 8, 10, 12, 20];
 
-  @property({ type: Boolean, reflect: true })
-  public roll = false;
+	render() {
+		const shapeClass = this.sideOptions.includes(this.sides)
+			? `d${this.sides}`
+			: "d6";
 
-  sideOptions = [4, 6, 8, 10, 12, 20]
+		const shapeValue =
+			this.value > 1 && this.value < this.sides + 1 ? this.value : this.sides;
 
-  render() {
-    const imgSrc = this.sideOptions.includes(this.sides) ?
-      `/assets/d${this.sides}.svg` :
-      '/assets/d6.svg';
-
-    return html`
-      <div class="dice-container">
-        <img src=${imgSrc} alt="Dice with ${this.sides} sides">
-        <div class="dice-value">${this.value}</div> 
+		return html`
+      <div class="dice-container ${shapeClass}"> 
+        <div class="dice-value">${shapeValue}</div> 
       </div>
     `;
-  }
+	}
 }
